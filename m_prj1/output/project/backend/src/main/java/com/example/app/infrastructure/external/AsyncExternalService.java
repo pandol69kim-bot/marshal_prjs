@@ -24,12 +24,12 @@ public class AsyncExternalService {
                 .uri(baseUrl + "/data/{id}", dataId)
                 .header("X-API-KEY", apiKey)
                 .retrieve()
-                .onStatus(HttpStatus::is4xxClientError, response ->
+                .onStatus(status -> status.is4xxClientError(), response ->
                         response.bodyToMono(String.class)
                                 .flatMap(body -> Mono.error(
                                         new ExternalApiException(ErrorCode.EXTERNAL_API_ERROR,
                                                 "4xx 오류: " + body))))
-                .onStatus(HttpStatus::is5xxServerError, response ->
+                .onStatus(status -> status.is5xxServerError(), response ->
                         Mono.error(new ExternalApiException(ErrorCode.EXTERNAL_API_ERROR,
                                 "외부 서버 5xx 오류")))
                 .bodyToMono(String.class)

@@ -80,7 +80,7 @@ ncp:
 external:
   data-api:
     base-url: ${EXTERNAL_DATA_API_BASE_URL:https://api.example.com}
-    api-key: ${EXTERNAL_DATA_API_KEY}
+    api-key: ${EXTERNAL_DATA_API_KEY:}
 
 feign:
   client:

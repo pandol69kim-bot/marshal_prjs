@@ -6,7 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "sendgrid", url = "https://api.sendgrid.com/v3")
+@FeignClient(
+        name = "sendgrid",
+        url = "https://api.sendgrid.com/v3",
+        fallback = com.example.app.infrastructure.external.fallback.SendGridClientFallback.class
+)
 public interface SendGridClient {
 
     @PostMapping("/mail/send")
