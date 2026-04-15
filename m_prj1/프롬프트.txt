@@ -1,0 +1,5 @@
+>@docs_vite-js  외부 시스템과의 연동 및 REST API 설계/개발을 중심으로 웹 서비스 기능 구현.  Vue/spring기반
+
+>@output project 폴더에  프로젝트 구성작업 완성해줘
+
+>프로젝트작업내역.md 파일에 저장해줘
