@@ -16,8 +16,8 @@ CREATE TABLE users (
                 CHECK (provider IN ('LOCAL', 'GOOGLE', 'KAKAO')),
     provider_id VARCHAR(255),
     avatar_url  TEXT,
-    created_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+    created_at  TIMESTAMP  NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP  NOT NULL DEFAULT NOW()
 );
 
 -- 리소스 테이블
@@ -28,8 +28,8 @@ CREATE TABLE resources (
     status      VARCHAR(20)  NOT NULL DEFAULT 'ACTIVE'
                 CHECK (status IN ('ACTIVE', 'INACTIVE', 'DELETED')),
     owner_id    UUID         NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
-    created_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+    created_at  TIMESTAMP  NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP  NOT NULL DEFAULT NOW()
 );
 
 -- 외부 API 호출 이력
@@ -42,7 +42,7 @@ CREATE TABLE external_api_logs (
     response_status INT          NOT NULL,
     response_body   TEXT,
     duration_ms     BIGINT       NOT NULL,
-    created_at      TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+    created_at      TIMESTAMP  NOT NULL DEFAULT NOW()
 );
 
 -- 알림 이력
@@ -55,8 +55,8 @@ CREATE TABLE notification_histories (
     status     VARCHAR(20)  NOT NULL DEFAULT 'PENDING'
                CHECK (status IN ('PENDING', 'SENT', 'FAILED')),
     error_msg  TEXT,
-    sent_at    TIMESTAMPTZ,
-    created_at TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+    sent_at    TIMESTAMP,
+    created_at TIMESTAMP  NOT NULL DEFAULT NOW()
 );
 
 -- 인덱스

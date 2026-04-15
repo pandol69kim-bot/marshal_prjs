@@ -38,7 +38,14 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
             provider = User.Provider.GOOGLE;
         } else if ("kakao".equals(registrationId)) {
             Map<String, Object> kakaoAccount = oAuth2User.getAttribute("kakao_account");
+            if (kakaoAccount == null) {
+                throw new OAuth2AuthenticationException("Kakao 계정 정보를 가져올 수 없습니다");
+            }
+            @SuppressWarnings("unchecked")
             Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
+            if (profile == null) {
+                throw new OAuth2AuthenticationException("Kakao 프로필 정보를 가져올 수 없습니다");
+            }
             email = (String) kakaoAccount.get("email");
             name = (String) profile.get("nickname");
             providerId = String.valueOf(oAuth2User.getAttribute("id"));

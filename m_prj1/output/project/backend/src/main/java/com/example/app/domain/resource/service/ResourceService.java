@@ -53,7 +53,11 @@ public class ResourceService {
     public ResourceDto update(Long id, UpdateResourceRequest request, String userId) {
         Resource resource = resourceRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
-        resource.update(request.name(), request.description());
+        Resource.Status status = null;
+        if (request.status() != null && !request.status().isBlank()) {
+            status = Resource.Status.valueOf(request.status());
+        }
+        resource.update(request.name(), request.description(), status);
         return ResourceDto.from(resource);
     }
 

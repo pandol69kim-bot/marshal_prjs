@@ -48,9 +48,10 @@ public class Resource {
         return resource;
     }
 
-    public void update(String name, String description) {
+    public void update(String name, String description, Status status) {
         this.name = name;
         this.description = description;
+        if (status != null) this.status = status;
     }
 
     public void delete() {

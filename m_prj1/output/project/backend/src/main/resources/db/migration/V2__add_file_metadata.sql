@@ -10,7 +10,7 @@ CREATE TABLE file_metadata (
     file_url       TEXT          NOT NULL,
     content_type   VARCHAR(100)  NOT NULL,
     file_size      BIGINT        NOT NULL,
-    created_at     TIMESTAMPTZ   NOT NULL DEFAULT NOW()
+    created_at     TIMESTAMP   NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX idx_file_meta_owner ON file_metadata(owner_id);

@@ -4,6 +4,9 @@ spring:
     username: postgres
     password: postgres
 
+  flyway:
+    clean-on-validation-error: true   # 로컬 전용: 체크섬 불일치 시 자동 clean 후 재적용
+
   jpa:
     hibernate:
       ddl-auto: validate
