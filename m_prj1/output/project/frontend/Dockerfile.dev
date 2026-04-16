@@ -1,0 +1,15 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# package.json만 먼저 복사해 npm install 레이어 캐싱
+COPY package*.json ./
+RUN npm install
+
+# 소스는 volume mount로 주입되므로 COPY 불필요
+# (docker-compose.dev.yml의 volumes 설정으로 핫리로드)
+
+EXPOSE 5173
+
+# --host 0.0.0.0: 컨테이너 외부 접근 허용 (필수)
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

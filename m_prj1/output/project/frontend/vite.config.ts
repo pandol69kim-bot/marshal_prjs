@@ -11,13 +11,18 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    host: '0.0.0.0',  // Docker 컨테이너 외부 접근 허용
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: process.env.VITE_API_TARGET || 'http://localhost:8080',
         changeOrigin: true
       },
       '/oauth2': {
-        target: 'http://localhost:8080',
+        target: process.env.VITE_API_TARGET || 'http://localhost:8080',
+        changeOrigin: true
+      },
+      '/login/oauth2': {
+        target: process.env.VITE_API_TARGET || 'http://localhost:8080',
         changeOrigin: true
       }
     }

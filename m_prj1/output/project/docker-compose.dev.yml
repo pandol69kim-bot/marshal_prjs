@@ -1,0 +1,31 @@
+# 개발 환경 오버라이드
+# 사용법: docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+#
+# - 백엔드: mvnw.cmd spring-boot:run (로컬 직접 실행)
+# - 프론트: Vite dev server (핫리로드, 포트 5173)
+# - 인프라만 Docker (postgres, redis, minio)
+
+services:
+  # 백엔드는 로컬 직접 실행이므로 제외
+  backend:
+    profiles:
+      - disabled
+
+  # 프론트엔드: Vite dev server + 소스 volume mount
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/index.html:/app/index.html
+      - /app/node_modules   # node_modules는 컨테이너 내부 것 사용
+    environment:
+      VITE_API_BASE_URL: "http://localhost:8080"
+      VITE_APP_NAME: "API Service"
+      VITE_OAUTH2_GOOGLE_URL: "http://localhost:8080/oauth2/authorization/google"
+      VITE_OAUTH2_KAKAO_URL: "http://localhost:8080/oauth2/authorization/kakao"
+    depends_on: []
