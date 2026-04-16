@@ -54,12 +54,18 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
             throw new OAuth2AuthenticationException("지원하지 않는 OAuth2 Provider: " + registrationId);
         }
 
+        // Kakao 이메일 미동의 시 — email 컬럼이 NOT NULL이므로 명시적 오류 반환
+        if (email == null) {
+            throw new OAuth2AuthenticationException(
+                    "이메일 제공에 동의하지 않아 로그인할 수 없습니다. 이메일 동의 후 다시 시도해주세요.");
+        }
+
         final String finalEmail = email;
         final String finalName = name;
         final String finalProviderId = providerId;
         final User.Provider finalProvider = provider;
 
-        userRepository.findByEmail(email)
+        userRepository.findByEmail(finalEmail)
                 .orElseGet(() -> userRepository.save(
                         User.createOAuth2(finalEmail, finalName, finalProvider, finalProviderId)));
 

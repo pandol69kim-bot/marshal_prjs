@@ -25,7 +25,7 @@ public class NotificationService {
 
     @Async("notificationExecutor")
     public void sendEmail(String userId, String subject, String content) {
-        User user = userRepository.findById(UUID.fromString(userId)).orElse(null);
+        User user = findUser(userId);
         if (user == null) {
             log.warn("이메일 발송 대상 사용자 없음: {}", userId);
             return;
@@ -47,7 +47,7 @@ public class NotificationService {
 
     @Async("notificationExecutor")
     public void sendSms(String userId, String phone, String message) {
-        User user = userRepository.findById(UUID.fromString(userId)).orElse(null);
+        User user = findUser(userId);
         if (user == null) {
             log.warn("SMS 발송 대상 사용자 없음: {}", userId);
             return;
@@ -64,6 +64,23 @@ public class NotificationService {
             history.markFailed(e.getMessage());
         } finally {
             historyRepository.save(history);
+        }
+    }
+
+    /**
+     * userId 또는 email 어느 형식이든 사용자를 조회한다.
+     * - "@" 포함 → 이메일로 조회
+     * - 그 외 → UUID로 조회 (파싱 실패 시 null 반환)
+     */
+    private User findUser(String userIdOrEmail) {
+        if (userIdOrEmail != null && userIdOrEmail.contains("@")) {
+            return userRepository.findByEmail(userIdOrEmail).orElse(null);
+        }
+        try {
+            return userRepository.findById(UUID.fromString(userIdOrEmail)).orElse(null);
+        } catch (IllegalArgumentException e) {
+            log.warn("잘못된 사용자 식별자 형식: {}", userIdOrEmail);
+            return null;
         }
     }
 }

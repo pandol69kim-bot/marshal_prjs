@@ -69,10 +69,8 @@ router.beforeEach(async (to) => {
     return { path: '/dashboard' }
   }
 
-  if (to.meta.requiresAdmin && !authStore.isAdmin) {
-    return { path: '/dashboard' }
-  }
-
+  // fetchMe를 requiresAdmin 체크 전에 실행해야
+  // 새로고침 시 user가 null이어도 어드민 여부를 올바르게 판단함
   if (authStore.isAuthenticated && !authStore.user) {
     try {
       await authStore.fetchMe()
@@ -80,6 +78,10 @@ router.beforeEach(async (to) => {
       authStore.clearAuth()
       return { name: 'login' }
     }
+  }
+
+  if (to.meta.requiresAdmin && !authStore.isAdmin) {
+    return { path: '/dashboard' }
   }
 })
 

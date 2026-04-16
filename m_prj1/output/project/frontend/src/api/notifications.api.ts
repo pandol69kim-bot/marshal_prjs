@@ -14,6 +14,7 @@ export interface NotificationDto {
 export interface SendNotificationRequest {
   userId: string
   channel: 'EMAIL' | 'SMS'
+  phone?: string   // SMS 채널 선택 시 필수
   title: string
   content: string
 }
