@@ -39,6 +39,12 @@ api.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest = error.config as any
 
+    // 인증 엔드포인트(로그인, 갱신 등)는 토큰 갱신 시도 없이 즉시 에러 반환
+    // → 갱신 요청이 다시 401을 받으면 isRefreshing=true 상태에서 failedQueue에 쌓여 데드락 발생
+    if (originalRequest.url?.includes('/auth/')) {
+      return Promise.reject(error)
+    }
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise<string>((resolve, reject) => {

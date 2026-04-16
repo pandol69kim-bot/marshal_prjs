@@ -19,6 +19,13 @@ const kakaoLoginUrl = import.meta.env.VITE_OAUTH2_KAKAO_URL
       <div class="card">
         <LoginForm />
 
+        <p class="mt-4 text-center text-sm text-gray-600">
+          계정이 없으신가요?
+          <RouterLink to="/register" class="font-medium text-primary-600 hover:text-primary-500">
+            회원가입
+          </RouterLink>
+        </p>
+
         <div class="mt-6">
           <div class="relative">
             <div class="absolute inset-0 flex items-center">

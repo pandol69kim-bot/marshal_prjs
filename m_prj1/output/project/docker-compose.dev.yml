@@ -6,10 +6,19 @@
 # - 인프라만 Docker (postgres, redis, minio)
 
 services:
-  # 백엔드는 로컬 직접 실행이므로 제외
+  # 백엔드는 로컬 직접 실행 — Docker에서는 의존성 검증용 더미 컨테이너로 대체
   backend:
-    profiles:
-      - disabled
+    image: alpine
+    command: sh -c "echo 'Backend is running locally on host (not in Docker)' && tail -f /dev/null"
+    ports: []
+    environment: {}
+    depends_on: {}
+    healthcheck:
+      test: ["CMD", "true"]
+      interval: 30s
+      timeout: 5s
+      retries: 1
+    restart: "no"
 
   # 프론트엔드: Vite dev server + 소스 volume mount
   frontend:
@@ -22,10 +31,17 @@ services:
       - ./frontend/src:/app/src
       - ./frontend/public:/app/public
       - ./frontend/index.html:/app/index.html
+      - ./frontend/vite.config.ts:/app/vite.config.ts        # @ 별칭 해석에 필수
+      - ./frontend/tailwind.config.js:/app/tailwind.config.js  # Tailwind CSS 처리에 필수
+      - ./frontend/postcss.config.js:/app/postcss.config.js    # Tailwind 디렉티브 변환에 필수
+      - ./frontend/tsconfig.json:/app/tsconfig.json
+      - ./frontend/tsconfig.app.json:/app/tsconfig.app.json
+      - ./frontend/tsconfig.node.json:/app/tsconfig.node.json
       - /app/node_modules   # node_modules는 컨테이너 내부 것 사용
     environment:
       VITE_API_BASE_URL: "http://localhost:8080"
       VITE_APP_NAME: "API Service"
       VITE_OAUTH2_GOOGLE_URL: "http://localhost:8080/oauth2/authorization/google"
       VITE_OAUTH2_KAKAO_URL: "http://localhost:8080/oauth2/authorization/kakao"
-    depends_on: []
+    depends_on:
+      - backend
