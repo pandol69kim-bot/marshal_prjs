@@ -1,17 +1,15 @@
-backend-1   | 2026-04-16T08:04:04.233Z ERROR 1 --- [app] [ notification-1] .a.i.SimpleAsyncUncaughtExceptionHandler : Unexpected exception occurred invoking async method: public void com.example.app.domain.notification.service.NotificationService.sendEmail(java.lang.String,java.lang.String,java.lang.String)
-backend-1   |
-backend-1   | java.lang.IllegalArgumentException: Invalid UUID string: pandol69.kim@gmail.com
-backend-1   |   at java.base/java.util.UUID.fromString1(Unknown Source) ~[na:na]
-backend-1   |   at java.base/java.util.UUID.fromString(Unknown Source) ~[na:na]
-backend-1   |   at com.example.app.domain.notification.service.NotificationService.sendEmail(NotificationService.java:28) ~[!/:0.0.1-SNAPSHOT]
-backend-1   |   at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(Unknown Source) ~[na:na]
-backend-1   |   at java.base/java.lang.reflect.Method.invoke(Unknown Source) ~[na:na]
-backend-1   |   at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:354) ~[spring-aop-6.1.8.jar!/:6.1.8]
-backend-1   |   at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196) ~[spring-aop-6.1.8.jar!/:6.1.8]
-backend-1   |   at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-6.1.8.jar!/:6.1.8]
-backend-1   |   at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.8.jar!/:6.1.8]
-backend-1   |   at org.springframework.aop.interceptor.AsyncExecutionInterceptor.lambda$invoke$0(AsyncExecutionInterceptor.java:113) ~[spring-aop-6.1.8.jar!/:6.1.8]
-backend-1   |   at java.base/java.util.concurrent.FutureTask.run(Unknown Source) ~[na:na]
-backend-1   |   at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source) ~[na:na]
-backend-1   |   at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source) ~[na:na]
-backend-1   |   at java.base/java.lang.Thread.run(Unknown Source) ~[na:na]
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Service</title>
+    <script type="module" crossorigin src="/assets/index-BMSnUKH-.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-D4xz8wMB.css">
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>

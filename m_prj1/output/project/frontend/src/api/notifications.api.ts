@@ -1,5 +1,5 @@
 import api from '@/lib/axios'
-import type { ApiResponse, PaginatedResponse, PageParams } from '@/types/api.types'
+import type { ApiResponse, PaginatedResponse } from '@/types/api.types'
 
 export interface NotificationDto {
   id: number
@@ -19,8 +19,12 @@ export interface SendNotificationRequest {
   content: string
 }
 
+export interface NotificationListParams {
+  sort?: string
+}
+
 export const notificationsApi = {
-  getList(params: PageParams) {
+  getList(params?: NotificationListParams) {
     return api.get<PaginatedResponse<NotificationDto[]>>('/api/v1/notifications', { params })
   },
 

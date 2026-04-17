@@ -11,9 +11,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +32,43 @@ public class NotificationController {
     @Operation(summary = "알림 발송 이력 조회")
     @GetMapping
     public ResponseEntity<ApiResponse<List<NotificationDto>>> getList(
-            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC)
-            Pageable pageable) {
-        Page<NotificationHistory> page = historyRepository.findAll(pageable);
+            @RequestParam(value = "sort", required = false) List<String> sortParams) {
+        List<NotificationHistory> histories = historyRepository.findAll(resolveSort(sortParams));
+        Page<NotificationHistory> page = new PageImpl<>(histories);
         return ResponseEntity.ok(
                 ApiResponse.success(
                         page.getContent().stream().map(NotificationDto::from).toList(),
                         new ApiResponse.PageMeta(page)));
+    }
+
+    private Sort resolveSort(List<String> sortParams) {
+        if (sortParams == null || sortParams.isEmpty()) {
+            return defaultSort();
+        }
+
+        String sortValue = sortParams.get(0);
+        if (sortValue == null || sortValue.isBlank()) {
+            return defaultSort();
+        }
+
+        if ("asc".equalsIgnoreCase(sortValue) || "desc".equalsIgnoreCase(sortValue)) {
+            return Sort.by(parseDirection(sortValue), "createdAt");
+        }
+
+        String[] parts = sortValue.split(",", 2);
+        if (parts.length == 2) {
+            return Sort.by(parseDirection(parts[1]), parts[0]);
+        }
+
+        return Sort.by(Sort.Direction.DESC, sortValue);
+    }
+
+    private Sort defaultSort() {
+        return Sort.by(Sort.Direction.DESC, "createdAt");
+    }
+
+    private Sort.Direction parseDirection(String value) {
+        return "asc".equalsIgnoreCase(value) ? Sort.Direction.ASC : Sort.Direction.DESC;
     }
 
     @Operation(summary = "알림 발송")

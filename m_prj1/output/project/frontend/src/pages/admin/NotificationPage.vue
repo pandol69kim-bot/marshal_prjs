@@ -5,14 +5,14 @@ import { notificationsApi } from '@/api/notifications.api'
 import { useToast } from '@/composables/useToast'
 
 const queryClient = useQueryClient()
-const params = ref({ page: 0, size: 20 })
+const listParams = { sort: 'createdAt,desc' }
 const { showSuccess, showError } = useToast()
 const isSending = ref(false)
 
 const { data, isLoading } = useQuery({
-  queryKey: ['notifications', params],
+  queryKey: ['notifications', listParams.sort],
   queryFn: async () => {
-    const { data } = await notificationsApi.getList(params.value)
+    const { data } = await notificationsApi.getList(listParams)
     return data
   }
 })
